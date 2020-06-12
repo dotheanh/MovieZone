@@ -13,11 +13,11 @@ namespace MovieZone.Models
 
         public int UserId { set; get; }
         [ForeignKey("UserId")]
-        private User User { get; set; }       // người thuê phim
+        public User User { get; set; }       // người thuê phim
 
         public int MovieId { set; get; }
         [ForeignKey("MovieId")]
-        private Movie Movie { get; set; }     // phim được thuê
+        public Movie Movie { get; set; }     // phim được thuê
 
         [DisplayName("Rent Date")]
         [DataType(DataType.Date)]

@@ -22,7 +22,8 @@ namespace MovieZone.Controllers
         // GET: MovieRental
         public async Task<IActionResult> Index()
         {
-            return View(await _context.MovieRentals.ToListAsync());
+            var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
+            return View(await movieContext.ToListAsync());
         }
 
         // GET: MovieRental/Details/5
@@ -34,6 +35,8 @@ namespace MovieZone.Controllers
             }
 
             var movieRental = await _context.MovieRentals
+                .Include(m => m.Movie)
+                .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movieRental == null)
             {
@@ -46,6 +49,8 @@ namespace MovieZone.Controllers
         // GET: MovieRental/Create
         public IActionResult Create()
         {
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
             return View();
         }
 
@@ -62,6 +67,8 @@ namespace MovieZone.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieRental.MovieId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", movieRental.UserId);
             return View(movieRental);
         }
 
@@ -78,6 +85,8 @@ namespace MovieZone.Controllers
             {
                 return NotFound();
             }
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieRental.MovieId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", movieRental.UserId);
             return View(movieRental);
         }
 
@@ -113,6 +122,8 @@ namespace MovieZone.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title", movieRental.MovieId);
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName", movieRental.UserId);
             return View(movieRental);
         }
 
@@ -125,6 +136,8 @@ namespace MovieZone.Controllers
             }
 
             var movieRental = await _context.MovieRentals
+                .Include(m => m.Movie)
+                .Include(m => m.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (movieRental == null)
             {
