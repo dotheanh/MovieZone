@@ -15,6 +15,7 @@ namespace MovieZone.Models
         public string Description { get; set; }
 
         [DisplayName("Release Date")]                               // cài đặt tên hiển thị cho thuộc tính
+        [DataType(DataType.Date)]                                   // chỉ lấy phần Date trong Datetime
         public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
         public int CategoryId { set; get; }                         // Thuộc tính lấy từ khóa ngoại CategoryId

@@ -20,8 +20,10 @@ namespace MovieZone.Models
         private Movie Movie { get; set; }     // phim được thuê
 
         [DisplayName("Rent Date")]
+        [DataType(DataType.Date)]
         public DateTime RentDate { get; set; }  // Ngày bắt đầu thuê
         [DisplayName("End Date")]
+        [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }   // Ngày kết thúc thuê
 
         public TimeSpan Duration { get; set; }   // TimeSpan là một struct để đại diện cho khoảng cách giữa 2 DateTime
