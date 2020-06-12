@@ -18,20 +18,33 @@ namespace MovieZone.Models
                     new Category
                     {
                         Name = "Comedy"
+                    },
+                    new Category
+                    {
+                        Name = "Heroes"
+                    },
+                    new Category
+                    {
+                        Name = "Action"
+                    },
+                    new Category
+                    {
+                        Name = "Drama"
                     }
                 );
                 context.SaveChanges();
 
-                ////////////////////////////////////////////////////////// Seed data cho Movies
+                ////////////////////////////////////////////////////////// Seed data cho Movies?????????????????????????
                 // if (context.Movies.Any()) { return; }
                 // context.Movies.AddRange(
                 //     new Movie
                 //     {
                 //         Title = "Avengers",
                 //         Description = "Incredible Heroes",
-                //         ReleaseDate = new DateTime(2008, 5, 1),
+                //         ReleaseDate = DateTime.Parse("1989-2-12"),
                 //         Price = 3,
-                //         Category = new Category("Heros")
+                //         CategoryId = 0,
+                //         Category = context.Categories.Find(0)
                 //     }
                 // );
                 // context.SaveChanges();
