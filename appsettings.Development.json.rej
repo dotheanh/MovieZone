@@ -1,0 +1,11 @@
+diff a/appsettings.Development.json b/appsettings.Development.json	(rejected hunks)
+@@ -4,6 +4,9 @@
+       "Default": "Information",
+       "Microsoft": "Warning",
+       "Microsoft.Hosting.Lifetime": "Information"
++    },
++    "ConnectionStrings": {
++      "MovieContext": "Data Source=Movie.db"
+     }
+   }
+ }
