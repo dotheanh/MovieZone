@@ -26,6 +26,8 @@ namespace MovieZone
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            // Khai báo Db Context service
+            services.AddDbContext<MovieContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MovieContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
