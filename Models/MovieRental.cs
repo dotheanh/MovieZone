@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieZone.Models
 {
@@ -9,8 +10,15 @@ namespace MovieZone.Models
     {
         [Key]
         public int Id { get; set; }
+
+        public int UserId { set; get; }
+        [ForeignKey("UserId")]
         private User User { get; set; }       // người thuê phim
+
+        public int MovieId { set; get; }
+        [ForeignKey("MovieId")]
         private Movie Movie { get; set; }     // phim được thuê
+
         [DisplayName("Rent Date")]
         public DateTime RentDate { get; set; }  // Ngày bắt đầu thuê
         [DisplayName("End Date")]

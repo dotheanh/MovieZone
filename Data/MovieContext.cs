@@ -8,5 +8,8 @@ namespace MovieZone.Data{
         }
 
         public DbSet<Movie> Movies {get; set;}  // Tập các thực thể <Movie> đại diện cho DB set lấy từ DB
+        public DbSet<Category> Categories {get; set;}
+        public DbSet<User> Users {get; set;}
+        public DbSet<MovieRental> MovieRentals {get; set;}
     }
 }

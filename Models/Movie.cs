@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MovieZone.Models
 {
@@ -16,6 +17,8 @@ namespace MovieZone.Models
         [DisplayName("Release Date")]                               // cài đặt tên hiển thị cho thuộc tính
         public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
-        public Category Category { get; set; }
+        public int CategoryId { set; get; }                         // Thuộc tính lấy từ khóa ngoại CategoryId
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }                      // Tạo khóa ngoại đến Category
     }
 }
