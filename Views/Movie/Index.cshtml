@@ -1,37 +1,46 @@
-@model IEnumerable<MovieZone.Models.Movie>
-
+@model MovieZone.Models.MovieCategoryViewModel
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Movie</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="Movie" asp-action="Index" method="get"> 
+    <p>
+        Title: <input type="text" name="SearchString">
+        <input type="submit" value="Search"/>
+
+        <select asp-for="MovieCategory" asp-items="Model.Categories">
+            <option value=""> All</option>
+        </select>
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Movies[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Movies[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReleaseDate)
+                @Html.DisplayNameFor(model => model.Movies[0].ReleaseDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Movies[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Movies[0].Category)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Movies) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)

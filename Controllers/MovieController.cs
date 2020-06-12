@@ -20,10 +20,31 @@ namespace MovieZone.Controllers
         }
 
         // GET: Movie
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string movieCategory) // truyền vào một search string
         {
-            var movieContext = _context.Movies.Include(m => m.Category);
-            return View(await movieContext.ToListAsync());
+            var movies = from m in _context.Movies.Include(m => m.Category)  // movies là mảng chứa các object Movie lấy từ context, được gắn thêm Category vào
+                         select m;
+
+            IQueryable<string> categoryQuery = from m in _context.Movies.Include(m => m.Category)  // movies là mảng chứa các object Movie lấy từ context, được gắn thêm Category vào
+                                               orderby m.Category.Name
+                                               select m.Category.Name;  // Lấy ra danh sách Category Name từ bảng
+
+            if (!String.IsNullOrEmpty(movieCategory))
+            {
+                movies = movies.Where(x => x.Category.Name == movieCategory); // lọc lại mảng movies chỉ còn các phần tử có Category Name trùng với chuỗi movieCategory
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                movies = movies.Where(p => p.Title.Contains(searchString)); // lọc lại mảng movies chỉ còn các phần tử có Title chứa chuỗi searchString
+            }
+
+            var movieCategoryVM = new MovieCategoryViewModel
+            {
+                Movies = await movies.ToListAsync(),
+                Categories = new SelectList(await categoryQuery.Distinct().ToListAsync())
+            };
+
+            return View(movieCategoryVM);
         }
 
         // GET: Movie/Details/5
