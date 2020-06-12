@@ -12,18 +12,29 @@ namespace MovieZone.Models
         {
             using (var context = new MovieContext(serviceProvider.GetRequiredService<DbContextOptions<MovieContext>>()))
             {
-                if (context.Movies.Any()) { return; }
-                context.Movies.AddRange(
-                    new Movie
+                ////////////////////////////////////////////////////////// Seed data cho Categories
+                if (context.Categories.Any()) { return; }
+                context.Categories.AddRange(
+                    new Category
                     {
-                        Title = "Avengers",
-                        Description = "Incredible Heroes",
-                        ReleaseDate = new DateTime(2008, 5, 1),
-                        Price = 3,
-                        Category = new Category("Heros")
+                        Name = "Comedy"
                     }
                 );
                 context.SaveChanges();
+
+                ////////////////////////////////////////////////////////// Seed data cho Movies
+                // if (context.Movies.Any()) { return; }
+                // context.Movies.AddRange(
+                //     new Movie
+                //     {
+                //         Title = "Avengers",
+                //         Description = "Incredible Heroes",
+                //         ReleaseDate = new DateTime(2008, 5, 1),
+                //         Price = 3,
+                //         Category = new Category("Heros")
+                //     }
+                // );
+                // context.SaveChanges();
             }
         }
     }
