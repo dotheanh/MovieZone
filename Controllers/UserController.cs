@@ -10,23 +10,22 @@ using MovieZone.Models;
 
 namespace MovieZone.Controllers
 {
-    public class MovieController : Controller
+    public class UserController : Controller
     {
         private readonly MovieContext _context;
 
-        public MovieController(MovieContext context)
+        public UserController(MovieContext context)
         {
             _context = context;
         }
 
-        // GET: Movie
+        // GET: User
         public async Task<IActionResult> Index()
         {
-            var movieContext = _context.Movies.Include(m => m.Category);
-            return View(await movieContext.ToListAsync());
+            return View(await _context.Users.ToListAsync());
         }
 
-        // GET: Movie/Details/5
+        // GET: User/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace MovieZone.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .Include(m => m.Category)
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(user);
         }
 
-        // GET: Movie/Create
+        // GET: User/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
-        // POST: Movie/Create
+        // POST: User/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,ReleaseDate,Price,CategoryId")] Movie movie)
+        public async Task<IActionResult> Create([Bind("Id,UserName,FullName")] User user)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(movie);
+                _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", movie.CategoryId);
-            return View(movie);
+            return View(user);
         }
 
-        // GET: Movie/Edit/5
+        // GET: User/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace MovieZone.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies.FindAsync(id);
-            if (movie == null)
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", movie.CategoryId);
-            return View(movie);
+            return View(user);
         }
 
-        // POST: Movie/Edit/5
+        // POST: User/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,ReleaseDate,Price,CategoryId")] Movie movie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,FullName")] User user)
         {
-            if (id != movie.Id)
+            if (id != user.Id)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace MovieZone.Controllers
             {
                 try
                 {
-                    _context.Update(movie);
+                    _context.Update(user);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MovieExists(movie.Id))
+                    if (!UserExists(user.Id))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace MovieZone.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", movie.CategoryId);
-            return View(movie);
+            return View(user);
         }
 
-        // GET: Movie/Delete/5
+        // GET: User/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,31 +124,30 @@ namespace MovieZone.Controllers
                 return NotFound();
             }
 
-            var movie = await _context.Movies
-                .Include(m => m.Category)
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (movie == null)
+            if (user == null)
             {
                 return NotFound();
             }
 
-            return View(movie);
+            return View(user);
         }
 
-        // POST: Movie/Delete/5
+        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var movie = await _context.Movies.FindAsync(id);
-            _context.Movies.Remove(movie);
+            var user = await _context.Users.FindAsync(id);
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MovieExists(int id)
+        private bool UserExists(int id)
         {
-            return _context.Movies.Any(e => e.Id == id);
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

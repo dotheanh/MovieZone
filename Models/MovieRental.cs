@@ -28,25 +28,25 @@ namespace MovieZone.Models
         [DisplayName("Total Price")]
         public decimal TotalPrice { get; set; }	// Tổng tiền
 
-        public MovieRental(User User, Movie Movie, DateTime RentDate, DateTime EndDate)    // tạo bằng ngày kết thúc thuê
-        {
-            this.User = User;
-            this.Movie = Movie;
-            this.RentDate = RentDate;
-            this.EndDate = EndDate;
-            this.Duration = (TimeSpan)(RentDate - EndDate);
-            this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
-        }
+        // public MovieRental(User User, Movie Movie, DateTime RentDate, DateTime EndDate)    // tạo bằng ngày kết thúc thuê
+        // {
+        //     this.User = User;
+        //     this.Movie = Movie;
+        //     this.RentDate = RentDate;
+        //     this.EndDate = EndDate;
+        //     this.Duration = (TimeSpan)(RentDate - EndDate);
+        //     this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
+        // }
 
-        public MovieRental(User User, Movie Movie, DateTime RentDate, TimeSpan Duration)    // tạo bằng thời hạn thuê
-        {
-            this.User = User;
-            this.Movie = Movie;
-            this.RentDate = RentDate;
-            this.EndDate = RentDate + Duration;
-            this.Duration = Duration;
-            this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
-        }
+        // public MovieRental(User User, Movie Movie, DateTime RentDate, TimeSpan Duration)    // tạo bằng thời hạn thuê
+        // {
+        //     this.User = User;
+        //     this.Movie = Movie;
+        //     this.RentDate = RentDate;
+        //     this.EndDate = RentDate + Duration;
+        //     this.Duration = Duration;
+        //     this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
+        // }
 
         public void ChangeDuration(TimeSpan NewDuration)
         {
