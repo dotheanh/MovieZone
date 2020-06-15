@@ -61,7 +61,20 @@ namespace MovieZone.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserId,MovieId,RentDate,EndDate,Duration,TotalPrice")] MovieRental movieRental)
         {
-            if (ModelState.IsValid)
+            // xử lý logic đầu vào
+            // Console.WriteLine(movieRental.Duration);
+            // Console.WriteLine(TimeSpan.Zero);
+            // Console.WriteLine(movieRental.EndDate);
+
+            if (movieRental.Duration != TimeSpan.Zero)                              // Từ Duration tính EndDate
+                movieRental.EndDate = movieRental.RentDate + movieRental.Duration;
+            else if (movieRental.EndDate != default(DateTime))                      // Từ EndDate tính Duration
+                movieRental.Duration = (TimeSpan)(movieRental.EndDate - movieRental.RentDate);
+            var tMovie = _context.Movies.Where(m => m.Id == movieRental.MovieId).First();
+            movieRental.TotalPrice = tMovie.Price * movieRental.Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
+
+
+            if (ModelState.IsValid && (movieRental.Duration != TimeSpan.Zero || movieRental.EndDate != default(DateTime)))
             {
                 _context.Add(movieRental);
                 await _context.SaveChangesAsync();

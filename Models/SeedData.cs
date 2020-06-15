@@ -88,7 +88,7 @@ namespace MovieZone.Models
                     context.SaveChanges();
                 }
 
-                //if (!context.MovieRentals.Any())//// ???????????//
+                if (!context.MovieRentals.Any())//// ???????????//
                 {
                     context.MovieRentals.AddRange(
                         new MovieRental
