@@ -49,7 +49,8 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Duration)
+                @Html.DisplayFor(modelItem => item.Duration.Days) 
+                Days
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TotalPrice)

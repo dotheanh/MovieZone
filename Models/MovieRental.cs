@@ -50,6 +50,12 @@ namespace MovieZone.Models
         //     this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
         // }
 
+        public MovieRental(){
+            if (this.Duration != null)
+                this.EndDate = this.RentDate + Duration;
+            //this.TotalPrice = this.Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
+        }
+
         public void ChangeDuration(TimeSpan NewDuration)
         {
             EndDate = EndDate + (NewDuration - Duration);
