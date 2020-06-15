@@ -68,13 +68,13 @@ namespace MovieZone.Controllers
 
             if (movieRental.Duration != TimeSpan.Zero)                              // Từ Duration tính EndDate
                 movieRental.EndDate = movieRental.RentDate + movieRental.Duration;
-            else if (movieRental.EndDate != default(DateTime))                      // Từ EndDate tính Duration
+            else if (movieRental.EndDate != default(DateTime) && movieRental.EndDate != null)                      // Từ EndDate tính Duration
                 movieRental.Duration = (TimeSpan)(movieRental.EndDate - movieRental.RentDate);
             var tMovie = _context.Movies.Where(m => m.Id == movieRental.MovieId).First();
             movieRental.TotalPrice = tMovie.Price * movieRental.Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
 
 
-            if (ModelState.IsValid && (movieRental.Duration != TimeSpan.Zero || movieRental.EndDate != default(DateTime)))
+            if (ModelState.IsValid && (movieRental.Duration != TimeSpan.Zero || (movieRental.EndDate != default(DateTime) && movieRental.EndDate != null)))
             {
                 _context.Add(movieRental);
                 await _context.SaveChangesAsync();

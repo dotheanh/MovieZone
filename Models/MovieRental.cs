@@ -24,7 +24,7 @@ namespace MovieZone.Models
         public DateTime RentDate { get; set; }  // Ngày bắt đầu thuê
         [DisplayName("End Date")]
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }   // Ngày kết thúc thuê
+        public DateTime? EndDate { get; set; }   // Ngày kết thúc thuê
 
         public TimeSpan Duration { get; set; }   // TimeSpan là một struct để đại diện cho khoảng cách giữa 2 DateTime
         [DisplayName("Total Price")]
@@ -50,11 +50,11 @@ namespace MovieZone.Models
         //     this.TotalPrice = Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
         // }
 
-        public MovieRental(){
-            if (this.Duration != null)
-                this.EndDate = this.RentDate + Duration;
-            //this.TotalPrice = this.Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
-        }
+        // public MovieRental(){
+        //     if (this.Duration != null)
+        //         this.EndDate = this.RentDate + Duration;
+        //     this.TotalPrice = this.Movie.Price * Duration.Days; // Duration.Days : chuyển Duration về dạng int số ngày
+        // }
 
         public void ChangeDuration(TimeSpan NewDuration)
         {
