@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieZone.Data;
 using MovieZone.Models;
+using MovieZone.ViewModels;
 
 namespace MovieZone.Controllers
 {
@@ -24,6 +25,26 @@ namespace MovieZone.Controllers
         {
             var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
             return View(await movieContext.ToListAsync());
+        }
+
+        ///////////////// trang index dùng ViewModel
+        public ActionResult mrvm()
+        {
+            var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
+
+            var viewModel = new MovieRentalViewModel        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
+            {
+                movie = movieContext.First().Movie,
+                user = movieContext.First().User,
+                movieRental = new MovieRental
+                {
+                    RentDate = movieContext.First().RentDate,
+                    EndDate = movieContext.First().EndDate,
+                    Duration = movieContext.First().Duration,
+                    TotalPrice = movieContext.First().TotalPrice
+                }
+            };
+            return View(viewModel);
         }
 
         // GET: MovieRental/Details/5

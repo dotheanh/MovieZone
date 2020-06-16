@@ -1,0 +1,96 @@
+@model MovieZone.ViewModels.MovieRentalViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Movie Rental</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.User.FullName) *@
+                User
+            </th>
+            <th>
+                Movie Title
+            </th>
+            <th>
+                Rent Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Total Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@* @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(Model.user.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Movie.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration.Days) 
+                Days
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+} *@
+
+
+        <tr>
+            <td>
+                @Model.user.FullName
+            </td>
+            <td>
+                @Model.movie.Title
+            </td>
+            <td>
+                @Model.movieRental.RentDate
+            </td>
+            <td>
+                 @Model.movieRental.EndDate
+            </td>
+            <td>
+                 @Model.movieRental.Duration.Days
+                Days
+            </td>
+            <td>
+                 @Model.movieRental.TotalPrice
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@Model.movieRental.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@Model.movieRental.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@Model.movieRental.Id">Delete</a>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
