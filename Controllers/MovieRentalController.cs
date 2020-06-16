@@ -32,18 +32,26 @@ namespace MovieZone.Controllers
         {
             var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
 
-            var viewModel = new MovieRentalViewModel        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
+            List<MovieRentalViewModel> viewModel = new List<MovieRentalViewModel>();        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
+
+            foreach (var mContext in movieContext)
             {
-                movie = movieContext.First().Movie,
-                user = movieContext.First().User,
-                movieRental = new MovieRental
+                var temp = new MovieRentalViewModel
                 {
-                    RentDate = movieContext.First().RentDate,
-                    EndDate = movieContext.First().EndDate,
-                    Duration = movieContext.First().Duration,
-                    TotalPrice = movieContext.First().TotalPrice
-                }
-            };
+                    movie = mContext.Movie,
+                    user = mContext.User,
+                    movieRental = new MovieRental
+                    {
+                        RentDate = mContext.RentDate,
+                        EndDate = mContext.EndDate,
+                        Duration = mContext.Duration,
+                        TotalPrice = mContext.TotalPrice
+                    }
+                };
+
+                viewModel.Add(temp);
+            }
+
             return View(viewModel);
         }
 
