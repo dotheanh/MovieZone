@@ -62,9 +62,7 @@ namespace MovieZone.Controllers
         public async Task<IActionResult> Create([Bind("Id,UserId,MovieId,RentDate,EndDate,Duration,TotalPrice")] MovieRental movieRental)
         {
             // xử lý logic đầu vào
-            // Console.WriteLine(movieRental.Duration);
-            // Console.WriteLine(TimeSpan.Zero);
-            // Console.WriteLine(movieRental.EndDate);
+
 
             if (movieRental.Duration != TimeSpan.Zero)                              // Từ Duration tính EndDate
                 movieRental.EndDate = movieRental.RentDate + movieRental.Duration;
