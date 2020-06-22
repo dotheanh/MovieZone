@@ -27,11 +27,10 @@ namespace MovieZone.Controllers
             return View(await movieContext.ToListAsync());
         }
 
-        ///////////////// trang index dùng ViewModel
-        public ActionResult mrvm()
+        /////////////// Movie Rental gọi ajax
+        public async Task<IActionResult> mrAJAX()
         {
-            var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
-
+            var movieContext = await _context.MovieRentals.Include(m => m.Movie).Include(m => m.User).ToListAsync();
             List<MovieRentalViewModel> viewModel = new List<MovieRentalViewModel>();        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
 
             foreach (var mContext in movieContext)
@@ -52,7 +51,35 @@ namespace MovieZone.Controllers
                 viewModel.Add(temp);
             }
 
-            return View(viewModel);
+            return View(viewModel); // viewModel là List<MovieRentalViewModel>
+        }
+
+
+        /////////////// trang Movie Rental dùng ViewModel
+        public async Task<IActionResult> mrvm()
+        {
+            var movieContext = await _context.MovieRentals.Include(m => m.Movie).Include(m => m.User).ToListAsync();
+            List<MovieRentalViewModel> viewModel = new List<MovieRentalViewModel>();        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
+
+            foreach (var mContext in movieContext)
+            {
+                var temp = new MovieRentalViewModel
+                {
+                    movie = mContext.Movie,
+                    user = mContext.User,
+                    movieRental = new MovieRental
+                    {
+                        RentDate = mContext.RentDate,
+                        EndDate = mContext.EndDate,
+                        Duration = mContext.Duration,
+                        TotalPrice = mContext.TotalPrice
+                    }
+                };
+
+                viewModel.Add(temp);
+            }
+
+            return View(viewModel); // viewModel là List<MovieRentalViewModel>
         }
 
         // GET: MovieRental/Details/5

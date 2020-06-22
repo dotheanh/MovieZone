@@ -1,0 +1,112 @@
+@model List<MovieZone.ViewModels.MovieRentalViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>    
+
+    
+
+<h1>Movie Rental</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+    <button id="action-button">Ajax</button>
+    <script type="text/javascript">
+        $('#action-button').click(function() {
+            $.ajax({
+                type: "POST",
+                url: '/MovieRental/mrAJAX',
+                //data: {
+                    //format: 'object'
+                //},
+                error: function() {
+                    $('#info').html('<p>An error has occurred</p>');
+                },
+                success: function(data) { alert(data);
+                    for (let i = 0; i < data.Count; i++) {alert('ok!');
+                        @* var $movieName = $('<h1>').text(data.listMovie[i].name);
+                        var $director = $('<h2>').text("Director: " + data.listMovie[i].director.name);
+                        var $rating = $('<p>').text("Rating: " + data.listMovie[i].review.reviewRating.ratingValue);
+                        var $review = $('<p>').text("Review: " + data.listMovie[i].review.reviewBody);
+
+
+                        var a = `'<img src="`;
+                        var b = `" style="width:500px;height:600px;"/>'`;
+                        var $image = a + data.listMovie[i].image + b;
+
+
+                        $('#info')
+                            .append($movieName)
+                            .append($image)
+                            .append($director)
+                            .append($rating)
+                            .append($review); *@
+                    };
+                },
+                type: 'GET'
+            });
+        });
+    </script>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.User.FullName) *@
+                User
+            </th>
+            <th>
+                Movie Title
+            </th>
+            <th>
+                Rent Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Total Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody id="info">
+@* @foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.user.FullName
+            </td>
+            <td>
+                @item.movie.Title
+            </td>
+            <td>
+                @item.movieRental.RentDate
+            </td>
+            <td>
+                 @item.movieRental.EndDate
+            </td>
+            <td>
+                 @item.movieRental.Duration.Days
+                Days
+            </td>
+            <td>
+                 @item.movieRental.TotalPrice
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.movieRental.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.movieRental.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.movieRental.Id">Delete</a>
+            </td>
+        </tr>
+}  *@
+
+    </tbody>
+</table>
+
