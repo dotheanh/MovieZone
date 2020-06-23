@@ -25,26 +25,27 @@
                 error: function() {
                     $('#info').html('<p>An error has occurred</p>');
                 },
-                success: function(data) { alert(data);
-                    for (let i = 0; i < data.length; i++) {alert('ok!');
+                success: function(data) {
+                    for (let i = 0; i < data.length; i++) {
                     // đã nhận được data từ controller, tiến hành parse dữ liệu
-                        @* var $movieName = $('<h1>').text(data.listMovie[i].name);
-                        var $director = $('<h2>').text("Director: " + data.listMovie[i].director.name);
-                        var $rating = $('<p>').text("Rating: " + data.listMovie[i].review.reviewRating.ratingValue);
-                        var $review = $('<p>').text("Review: " + data.listMovie[i].review.reviewBody);
-
-
-                        var a = `'<img src="`;
-                        var b = `" style="width:500px;height:600px;"/>'`;
-                        var $image = a + data.listMovie[i].image + b;
-
-
+                        console.log(data[i]);
+                        console.log(data[i].movieRental.duration.Days);
+                        var $fullName = $('<td>').text(data[i].user.fullName);
+                        var $movieTitle = $('<td>').text(data[i].movie.title);
+                        var $rentDate = $('<td>').text(data[i].movieRental.rentDate);
+                        var $endDate = $('<td>').text(data[i].movieRental.endDate);
+                        var $duration = $('<td>').text(data[i].movieRental.duration.totalDays);
+                        var $totalPrice = $('<td>').text(data[i].movieRental.totalPrice);
+                       
                         $('#info')
-                            .append($movieName)
-                            .append($image)
-                            .append($director)
-                            .append($rating)
-                            .append($review); *@
+                        .append($('<tr>')
+                            .append($fullName)
+                            .append($movieTitle)
+                            .append($rentDate)
+                            .append($endDate)
+                            .append($duration)
+                            .append($totalPrice)
+                        );                          
                     };
                 },
                 type: 'GET'
