@@ -18,7 +18,7 @@
         $('#action-button').click(function() {
             $.ajax({
                 type: "POST",
-                url: '/MovieRental/mrAJAX',
+                url: '/MovieRental/getData',
                 //data: {
                     //format: 'object'
                 //},
@@ -26,7 +26,8 @@
                     $('#info').html('<p>An error has occurred</p>');
                 },
                 success: function(data) { alert(data);
-                    for (let i = 0; i < data.Count; i++) {alert('ok!');
+                    for (let i = 0; i < data.length; i++) {alert('ok!');
+                    // đã nhận được data từ controller, tiến hành parse dữ liệu
                         @* var $movieName = $('<h1>').text(data.listMovie[i].name);
                         var $director = $('<h2>').text("Director: " + data.listMovie[i].director.name);
                         var $rating = $('<p>').text("Rating: " + data.listMovie[i].review.reviewRating.ratingValue);

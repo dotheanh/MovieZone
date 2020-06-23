@@ -28,9 +28,14 @@ namespace MovieZone.Controllers
         }
 
         /////////////// Movie Rental gọi ajax
-        public async Task<IActionResult> mrAJAX()
+        public IActionResult mrAJAX()
         {
-            var movieContext = await _context.MovieRentals.Include(m => m.Movie).Include(m => m.User).ToListAsync();
+            return View();
+        }
+
+        public List<MovieRentalViewModel> getData()
+        {
+            var movieContext =  _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
             List<MovieRentalViewModel> viewModel = new List<MovieRentalViewModel>();        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
 
             foreach (var mContext in movieContext)
@@ -51,7 +56,7 @@ namespace MovieZone.Controllers
                 viewModel.Add(temp);
             }
 
-            return View(viewModel); // viewModel là List<MovieRentalViewModel>
+            return viewModel; // viewModel là List<MovieRentalViewModel>
         }
 
 
