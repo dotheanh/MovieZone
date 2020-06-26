@@ -23,16 +23,25 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-controller="Movie" asp-action="Index" method="get"> 
-    <p>
-        Title: <input type="text" name="SearchString">
-        <input type="submit" value="Search"/>
 
-        <select asp-for="MovieCategory" asp-items="Model.Categories">
+<!-- SEARCH FORM -->
+<form asp-controller="Movie" asp-action="Index" method="get" class="form-inline ml-6" style="margin-bottom: 35px;"> 
+    <div class="input-group input-group-sm">
+
+        <select asp-for="MovieCategory" asp-items="Model.Categories" class="custom-select" style="width: auto;" data-sortorder="">
             <option value=""> All</option>
         </select>
-    </p>
+
+        <input class="" type="text" name="SearchString" placeholder="Title" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-navbar" type="submit">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+     </div>
 </form>
+
+
 
 <section class="content">
 
