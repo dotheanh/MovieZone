@@ -76,8 +76,6 @@
                 success: function(data) {
                     for (let i = 0; i < data.length; i++) {
                     // đã nhận được data từ controller, tiến hành parse dữ liệu
-                        console.log(data[i]);
-                        console.log(data[i].movieRental.duration.Days);
                         var $fullName = $('<td>').text(data[i].user.fullName);
                         var $movieTitle = $('<td>').text(data[i].movie.title);
                         var $rentDate = $('<td>').text(data[i].movieRental.rentDate);
