@@ -3,56 +3,32 @@
 @{
     ViewData["Title"] = "Index";
 }
-   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>    
+   
+        <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Movie Rental</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/Home">Home</a></li>
+              <li class="breadcrumb-item active">Movie Rental</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
+
+
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <button id="action-button" onclick="ajaxData()">Ajax</button>
     
-
-<h1>Movie Rental</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-
-    <button id="action-button">Ajax</button>
-    <script type="text/javascript">
-        $('#action-button').click(function() {
-            $.ajax({
-                type: "POST",
-                url: '/MovieRental/getData',
-                //data: {
-                    //format: 'object'
-                //},
-                error: function() {
-                    $('#info').html('<p>An error has occurred</p>');
-                },
-                success: function(data) {
-                    for (let i = 0; i < data.length; i++) {
-                    // đã nhận được data từ controller, tiến hành parse dữ liệu
-                        console.log(data[i]);
-                        console.log(data[i].movieRental.duration.Days);
-                        var $fullName = $('<td>').text(data[i].user.fullName);
-                        var $movieTitle = $('<td>').text(data[i].movie.title);
-                        var $rentDate = $('<td>').text(data[i].movieRental.rentDate);
-                        var $endDate = $('<td>').text(data[i].movieRental.endDate);
-                        var $duration = $('<td>').text(data[i].movieRental.duration.totalDays);
-                        var $totalPrice = $('<td>').text(data[i].movieRental.totalPrice);
-                       
-                        $('#info')
-                        .append($('<tr>')
-                            .append($fullName)
-                            .append($movieTitle)
-                            .append($rentDate)
-                            .append($endDate)
-                            .append($duration)
-                            .append($totalPrice)
-                        );                          
-                    };
-                },
-                type: 'GET'
-            });
-        });
-    </script>
-
 <table class="table">
     <thead>
         <tr>
@@ -80,35 +56,45 @@
     </thead>
     
     <tbody id="info">
-@* @foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.user.FullName
-            </td>
-            <td>
-                @item.movie.Title
-            </td>
-            <td>
-                @item.movieRental.RentDate
-            </td>
-            <td>
-                 @item.movieRental.EndDate
-            </td>
-            <td>
-                 @item.movieRental.Duration.Days
-                Days
-            </td>
-            <td>
-                 @item.movieRental.TotalPrice
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.movieRental.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.movieRental.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.movieRental.Id">Delete</a>
-            </td>
-        </tr>
-}  *@
 
     </tbody>
 </table>
 
+
+    <script type="text/javascript">
+
+    function ajaxData() {
+            $.ajax({
+                type: "POST",
+                url: '/MovieRental/getData',
+                //data: {
+                    //format: 'object'
+                //},
+                error: function() {
+                    $('#info').html('<p>An error has occurred</p>');
+                },
+                success: function(data) {
+                    for (let i = 0; i < data.length; i++) {
+                    // đã nhận được data từ controller, tiến hành parse dữ liệu
+                        var $fullName = $('<td>').text(data[i].user.fullName);
+                        var $movieTitle = $('<td>').text(data[i].movie.title);
+                        var $rentDate = $('<td>').text(data[i].movieRental.rentDate);
+                        var $endDate = $('<td>').text(data[i].movieRental.endDate);
+                        var $duration = $('<td>').text(data[i].movieRental.duration.totalDays);
+                        var $totalPrice = $('<td>').text(data[i].movieRental.totalPrice);
+                       
+                        $('#info')
+                        .append($('<tr>')
+                            .append($fullName)
+                            .append($movieTitle)
+                            .append($rentDate)
+                            .append($endDate)
+                            .append($duration)
+                            .append($totalPrice)
+                        );                          
+                    };
+                },
+                type: 'GET'
+            });
+        };
+    </script>

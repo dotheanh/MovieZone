@@ -27,6 +27,13 @@ namespace MovieZone.Controllers
             return View(await movieContext.ToListAsync());
         }
 
+        ////////////////////////// trang biểu đồ cho thuê phim
+        public async Task<IActionResult> Charts()
+        {
+            var movieContext = _context.MovieRentals;
+            return View(await movieContext.ToListAsync());
+        }
+
         /////////////// Movie Rental gọi ajax
         public IActionResult mrAJAX()
         {
@@ -35,7 +42,7 @@ namespace MovieZone.Controllers
 
         public List<MovieRentalViewModel> getData()
         {
-            var movieContext =  _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
+            var movieContext = _context.MovieRentals.Include(m => m.Movie).Include(m => m.User);
             List<MovieRentalViewModel> viewModel = new List<MovieRentalViewModel>();        // tạo ActionResult theo kiểu ViewModel, lấy dòng dữ liệu đầu từ context
 
             foreach (var mContext in movieContext)
