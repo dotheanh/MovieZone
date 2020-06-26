@@ -20,12 +20,12 @@
       </div><!-- /.container-fluid -->
     </section>
 
-<p>
+<p style="padding-left: 20px;">
     <a asp-action="Create">Create New</a>
 </p>
 
 <!-- SEARCH FORM -->
-<form asp-controller="Movie" asp-action="Index" method="get" class="form-inline ml-6" style="margin-bottom: 35px;"> 
+<form asp-controller="Movie" asp-action="Index" method="get" class="form-inline ml-6" style="margin-bottom: 25px; padding-left: 20px;"> 
     <div class="input-group input-group-sm">
 
         <select asp-for="MovieCategory" asp-items="Model.Categories" class="custom-select" style="width: auto;" data-sortorder="">
