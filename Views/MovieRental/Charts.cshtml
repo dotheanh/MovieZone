@@ -27,7 +27,7 @@
             <!-- AREA CHART -->
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Area Chart</h3>
+                <h3 class="card-title">Rent and Expire Chart for June</h3>
 
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -88,22 +88,22 @@
             });
 
         function generateChart() {
-            console.log(RentData.length);
-            console.log(RentData);
-            console.log(RentData[0]);
-            //console.log(RentData[0].RentDate.substring(8, 9));
 
             // tạo mảng rentFrequency[30] với các phần tử bằng 0
-            // duyệt qua mảng RentData, tách phần ngày trong RentDate rồi parse thành số int
-            // rentFrequency[ngày] ++;
-            
             rentFrequency= new Array();
-            for (let d = 1; d <= 30; d++)
-              rentFrequency[d] = Math.floor((Math.random() * 10) + 1);
             expiredFrequency= new Array();
-            for (let d = 1; d <= 30; d++)
-              expiredFrequency[d] = Math.floor((Math.random() * 10) + 1);
-
+            for (let d = 1; d <= 30; d++){
+              rentFrequency[d] = 0;
+              expiredFrequency[d] = 0;
+            }
+            // duyệt qua mảng RentData, tách phần ngày trong RentDate rồi parse thành số int, rentFrequency[ngày] ++;
+            for (let i = 0; i < RentData.length; i++){
+              var rentDate = parseInt(RentData[i].RentDate.substring(8, 10));
+              rentFrequency[rentDate]++;
+              var expiredDate = parseInt(RentData[i].EndDate.substring(8, 10));
+              expiredFrequency[expiredDate]++;
+            }
+            
             //--------------
             //- AREA CHART -
             //--------------
