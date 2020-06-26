@@ -3,19 +3,67 @@
 @{
     ViewData["Title"] = "Index";
 }
-   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>    
+   
+        <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Movie Rental</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="/Home">Home</a></li>
+              <li class="breadcrumb-item active">Movie Rental</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
 
+
+
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <button id="action-button" onclick="ajaxData()">Ajax</button>
     
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @* @Html.DisplayNameFor(model => model.User.FullName) *@
+                User
+            </th>
+            <th>
+                Movie Title
+            </th>
+            <th>
+                Rent Date
+            </th>
+            <th>
+                End Date
+            </th>
+            <th>
+                Duration
+            </th>
+            <th>
+                Total Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    
+    <tbody id="info">
 
-<h1>Movie Rental</h1>
+    </tbody>
+</table>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
-    <button id="action-button">Ajax</button>
     <script type="text/javascript">
-        $('#action-button').click(function() {
+
+    function ajaxData() {
             $.ajax({
                 type: "POST",
                 url: '/MovieRental/getData',
@@ -50,65 +98,5 @@
                 },
                 type: 'GET'
             });
-        });
+        };
     </script>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @* @Html.DisplayNameFor(model => model.User.FullName) *@
-                User
-            </th>
-            <th>
-                Movie Title
-            </th>
-            <th>
-                Rent Date
-            </th>
-            <th>
-                End Date
-            </th>
-            <th>
-                Duration
-            </th>
-            <th>
-                Total Price
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    
-    <tbody id="info">
-@* @foreach (var item in Model) {
-        <tr>
-            <td>
-                @item.user.FullName
-            </td>
-            <td>
-                @item.movie.Title
-            </td>
-            <td>
-                @item.movieRental.RentDate
-            </td>
-            <td>
-                 @item.movieRental.EndDate
-            </td>
-            <td>
-                 @item.movieRental.Duration.Days
-                Days
-            </td>
-            <td>
-                 @item.movieRental.TotalPrice
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.movieRental.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.movieRental.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.movieRental.Id">Delete</a>
-            </td>
-        </tr>
-}  *@
-
-    </tbody>
-</table>
-
