@@ -19,6 +19,11 @@ namespace MovieZone.Controllers
             _context = context;
         }
 
+        public  IActionResult Login()
+        {
+            return PartialView();
+        }
+
         // GET: User
         public async Task<IActionResult> Index()
         {
