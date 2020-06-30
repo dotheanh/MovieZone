@@ -28,6 +28,9 @@ namespace MovieZone
             services.AddControllersWithViews();
             // Khai báo Db Context service
             services.AddDbContext<MovieContext>(options => options.UseSqlite(Configuration.GetConnectionString("MovieContext")));
+
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +52,9 @@ namespace MovieZone
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // IMPORTANT: This session call MUST go before UseMvc()
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
