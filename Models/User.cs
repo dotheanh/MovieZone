@@ -16,14 +16,14 @@ namespace MovieZone.Models
         [DisplayName("Full Name")]
         public string FullName { get; set; }
 
-        // [Required]
-        // [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")] 
-        // public string Password { get; set; }
+        [Required]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")] 
+        public string Password { get; set; }
  
-        // [NotMapped]
-        // [Required]
-        // [System.ComponentModel.DataAnnotations.Compare("Password")]
-        // public string ConfirmPassword { get; set; }
+        [NotMapped]
+        [Required]
+        [System.ComponentModel.DataAnnotations.Compare("Password")]
+        public string ConfirmPassword { get; set; }
 
     }
 }

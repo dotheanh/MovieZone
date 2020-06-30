@@ -69,7 +69,7 @@ namespace MovieZone.Migrations
                     b.Property<TimeSpan>("Duration")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("EndDate")
+                    b.Property<DateTime?>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("MovieId")
@@ -86,6 +86,10 @@ namespace MovieZone.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MovieId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("MovieRentals");
                 });
 
@@ -96,6 +100,10 @@ namespace MovieZone.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -113,6 +121,21 @@ namespace MovieZone.Migrations
                     b.HasOne("MovieZone.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("MovieZone.Models.MovieRental", b =>
+                {
+                    b.HasOne("MovieZone.Models.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MovieZone.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

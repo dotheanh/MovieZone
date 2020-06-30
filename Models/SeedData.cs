@@ -77,12 +77,14 @@ namespace MovieZone.Models
                         new User
                         {
                             UserName = "nhoxtheanh",
-                            FullName = "Đỗ Thế Anh"
+                            FullName = "Đỗ Thế Anh",
+                            Password = "dotheAnh123"
                         },
                         new User
                         {
                             UserName = "nhoxtheem",
-                            FullName = "Đỗ Thế Em"
+                            FullName = "Đỗ Thế Em",
+                            Password = "dotheEm123"
                         }
                     );
                     context.SaveChanges();
@@ -96,7 +98,7 @@ namespace MovieZone.Models
                             User = context.Users.Where(u => u.FullName == "Đỗ Thế Anh").First(),
                             Movie = context.Movies.Where(m => m.Title == "AVENGERS: Age of Ultron").First(),
                             RentDate = DateTime.Parse("2020-6-15"),
-                            EndDate = DateTime.Parse("2020-6-13"),
+                            EndDate = DateTime.Parse("2020-6-18"),
                             Duration = TimeSpan.FromDays(3),
                             TotalPrice = 6.7M
                         },
