@@ -11,6 +11,8 @@ using MovieZone.Models;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Text;
+using StackExchange.Redis;
+
 
 namespace MovieZone.Controllers
 {
@@ -37,6 +39,7 @@ namespace MovieZone.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(User _user)
         {
+
             if (ModelState.IsValid)
             {
                 var check = _context.Users.FirstOrDefault(s => s.UserName == _user.UserName);
@@ -63,6 +66,42 @@ namespace MovieZone.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(string username, string password)
         {
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+            // Tạo kết nối
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");  // redis ở client?????????????
+
+            // Lấy DB
+            IDatabase db = redis.GetDatabase(1);
+
+            // Ping thử
+            if (db.Ping().TotalSeconds > 5)
+            {
+                throw new TimeoutException("Server Redis không hoạt động");
+            }
+
+            // Lưu dữ liệu
+            // string key = "username";
+            // string value = "nhoxtheanh";
+            // db.StringSet(key, value);
+
+            // Đọc lại dữ liệu
+            var user = db.StringGet("username");
+            Console.WriteLine(user);
+
+            // // Xóa một key
+            // db.KeyDelete("mykey");
+
+            // Lấy tất cả các key
+            IServer server = redis.GetServer("127.0.0.1:6379");  // redis ở server?????????????
+            var keys = server.Keys(pattern: "*");
+            foreach (var k in keys)
+            {
+                Console.WriteLine(k);
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////
+
             if (ModelState.IsValid)
             {
                 /////////////// var f_password = GetMD5(password);  
@@ -75,7 +114,7 @@ namespace MovieZone.Controllers
                     HttpContext.Session.SetString("UserName", data.FirstOrDefault().UserName.ToString());
                     HttpContext.Session.SetString("idUser", data.FirstOrDefault().Id.ToString());
                     return RedirectToAction("Index");
-                }   
+                }
                 else
                 {
                     ViewBag.error = "Login failed";
@@ -92,7 +131,7 @@ namespace MovieZone.Controllers
             HttpContext.Session.Clear();//remove session
             return RedirectToAction("Login");
         }
-        
+
         //create a string MD5
         // public static string GetMD5(string str)
         // {
@@ -100,11 +139,11 @@ namespace MovieZone.Controllers
         //     byte[] fromData = Encoding.UTF8.GetBytes(str);
         //     byte[] targetData = md5.ComputeHash(fromData);
         //     string byte2String = null;
- 
+
         //     for (int i = 0; i < targetData.Length; i++)
         //     {
         //         byte2String += targetData[i].ToString("x2");
-                
+
         //     }
         //     return byte2String;
         // }
