@@ -3,9 +3,22 @@
 @{
     ViewData["Title"] = "Create";
 }
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MovieZone</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 
-
-<div class="row justify-content-md-center">
+        <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
+</head>
+<body>
+    <div class="row justify-content-md-center">
     <div class="col-md-4">
         <div class="card">
             <div class="card-header">
@@ -18,17 +31,22 @@
                     <div class="form-group">
                         @Html.LabelFor(m => m.UserName)
                         @Html.TextBoxFor(m => m.UserName, "", new { @class = "form-control", @placeholder = "UserName" })
- 
+
                     </div>
-                    @* <div class="form-group">
+                    <div class="form-group">
                         @Html.LabelFor(m => m.Password)
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password" })
-                    </div> *@
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="btn btn-primary" value="Login"/>
                     </div>
+                    <div class="form-group" >
+                        <input type="submit" name="submit" class="btn btn-primary" value="Login"/>
+                        <a href="@Url.Action("Register","User")" style = "text-align: center; float: right;" >Register new account</a>
+                    </div>
+                    
                 }
             </div>
         </div>
     </div>
 </div>
+</body>
+
+

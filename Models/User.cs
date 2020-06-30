@@ -20,7 +20,7 @@ namespace MovieZone.Models
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")] 
         public string Password { get; set; }
  
-        [NotMapped]
+        [NotMapped] // thuộc tính này ko được ánh xạ vào DB
         [Required]
         [System.ComponentModel.DataAnnotations.Compare("Password")]
         public string ConfirmPassword { get; set; }

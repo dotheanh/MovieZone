@@ -9,7 +9,8 @@ using MovieZone.Data;
 using MovieZone.Models;
 // using System.Web;
 using Microsoft.AspNetCore.Http;
-
+using System.Security.Cryptography;
+using System.Text;
 
 namespace MovieZone.Controllers
 {
@@ -22,12 +23,12 @@ namespace MovieZone.Controllers
             _context = context;
         }
 
-        public IActionResult Login()
+        public ActionResult Login()// lần đầu truy cập vào trang login thì sẽ gọi cái này. Sau khi bắt đầu input sẽ chuyển sang method POST Login
         {
             return PartialView();
         }
 
-        public IActionResult Register()
+        public ActionResult Register()
         {
             return PartialView();
         }
@@ -50,32 +51,29 @@ namespace MovieZone.Controllers
                 else
                 {
                     ViewBag.error = "UserName already exists";
-                    return View();
+                    return PartialView();
                 }
             }
-            return View();
+            return PartialView();
 
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(string username, string password="NOOO")///////////////chưa truyền password
+        public ActionResult Login(string username, string password)
         {
             if (ModelState.IsValid)
             {
                 /////////////// var f_password = GetMD5(password);  
                 var f_password = password;                             // chưa mã hóa password
-                // var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();
-                var data = _context.Users.Where(s => s.UserName.Equals(username)).ToList();///////////////chưa truyền password
+                var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();
                 if (data.Count() > 0)
                 {
                     //add session
-                    //Session["FullName"] = data.FirstOrDefault().FirstName + " " + data.FirstOrDefault().LastName;
+                    HttpContext.Session.SetString("FullName", data.FirstOrDefault().FullName.ToString());
                     HttpContext.Session.SetString("UserName", data.FirstOrDefault().UserName.ToString());
                     HttpContext.Session.SetString("idUser", data.FirstOrDefault().Id.ToString());
-                    // Session["UserName"] = data.FirstOrDefault().UserName;
-                    // Session["idUser"] = data.FirstOrDefault().Id;
                     return RedirectToAction("Index");
                 }   
                 else
@@ -84,7 +82,7 @@ namespace MovieZone.Controllers
                     return RedirectToAction("Login");
                 }
             }
-            return View();
+            return PartialView();
         }
 
 
@@ -94,6 +92,22 @@ namespace MovieZone.Controllers
             HttpContext.Session.Clear();//remove session
             return RedirectToAction("Login");
         }
+        
+        //create a string MD5
+        // public static string GetMD5(string str)
+        // {
+        //     MD5 md5 = new MD5CryptoServiceProvider();
+        //     byte[] fromData = Encoding.UTF8.GetBytes(str);
+        //     byte[] targetData = md5.ComputeHash(fromData);
+        //     string byte2String = null;
+ 
+        //     for (int i = 0; i < targetData.Length; i++)
+        //     {
+        //         byte2String += targetData[i].ToString("x2");
+                
+        //     }
+        //     return byte2String;
+        // }
 
 
         // GET: User
