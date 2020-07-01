@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Text;
 using StackExchange.Redis;
-
+using CSRedis;
 
 namespace MovieZone.Controllers
 {
@@ -51,20 +51,17 @@ namespace MovieZone.Controllers
                     _context.SaveChanges();
 
                     /////////////////////////////////////////////////////////////////////////// luu tai khoan vao redis
-                    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");
-                    IDatabase db = redis.GetDatabase(1);
-                    if (db.Ping().TotalSeconds > 5)
+                    using (var redis = new RedisClient("localhost"))
                     {
-                        throw new TimeoutException("Server Redis not work");
+                        // Lưu dữ liệu
+                        string username = _user.UserName;
+                        string password = _user.Password;
+                        Console.WriteLine("\n username se luu xuong redis\n");
+                        Console.WriteLine(username);
+                        Console.WriteLine("\n password se luu xuong redis\n");
+                        Console.WriteLine(password);
+                        redis.Set(username, password);           // lưu key-value xuống Redis
                     }
-                    // Lưu dữ liệu
-                    string username = _user.UserName;
-                    string password = _user.Password;
-                    Console.WriteLine("\nUserName se luu vao redis\n");
-                    Console.WriteLine(username);
-                    Console.WriteLine("\nPassword se luu vao redis\n");
-                    Console.WriteLine(password);
-                    db.StringSet(username, password);
                     ////////////////////////////////////////////////////////////////////////////////////////////////////
                     return RedirectToAction("Index");
                 }
@@ -88,43 +85,45 @@ namespace MovieZone.Controllers
             {
 
                 /////////////////////////////////////////////////////////////////////////////////////////////////
-                // Tạo kết nối
-                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");
-                // Lấy DB
-                IDatabase db = redis.GetDatabase(1);
-                // Ping thử
-                if (db.Ping().TotalSeconds > 5)
-                {
-                    throw new TimeoutException("Server Redis không hoạt động");
-                }
-                // Đọc lại dữ liệu
-                Console.WriteLine("\n username nhap vao\n");
-                Console.WriteLine(username);
-                Console.WriteLine("\n password nhap vao\n");
-                Console.WriteLine(password);
-                var userPassword = db.StringGet(username);
-                Console.WriteLine("password lay tu redis\n");
-                Console.WriteLine(userPassword);
-                if (password == userPassword)
-                    Console.WriteLine("dang nhap thanh cong!");
                 /////////////////////////////////////////////////////////////////////////////////////////////////
-
-                /////////////// var f_password = GetMD5(password);  
-                var f_password = password;                             // chưa mã hóa password
-                var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();
-                if (data.Count() > 0)
+                using (var redis = new RedisClient("localhost"))
                 {
-                    //add session
-                    HttpContext.Session.SetString("FullName", data.FirstOrDefault().FullName.ToString());
-                    HttpContext.Session.SetString("UserName", data.FirstOrDefault().UserName.ToString());
-                    HttpContext.Session.SetString("idUser", data.FirstOrDefault().Id.ToString());
-                    return RedirectToAction("Index");
+                    Console.WriteLine("\n username nhap vao\n");
+                    Console.WriteLine(username);
+                    Console.WriteLine("\n password nhap vao\n");
+                    Console.WriteLine(password);
+                    var userPassword = redis.Get(username);
+                    Console.WriteLine("password lay tu redis\n");
+                    Console.WriteLine(userPassword);
+                    if (password == userPassword)
+                    {
+                        Console.WriteLine("dang nhap thanh cong!");
+                        /////////////// var f_password = GetMD5(password);  
+                        var f_password = password;                             // chưa mã hóa password
+                        var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();
+                        if (data.Count() > 0)
+                        {
+                            //add session
+                            HttpContext.Session.SetString("FullName", data.FirstOrDefault().FullName.ToString());
+                            HttpContext.Session.SetString("UserName", data.FirstOrDefault().UserName.ToString());
+                            HttpContext.Session.SetString("idUser", data.FirstOrDefault().Id.ToString());
+                        }
+                        else // tài khoản không có trong database, có thể là được tạo trực tiếp ở Redis
+                        {
+                            HttpContext.Session.SetString("FullName", "Redis FullName");
+                            HttpContext.Session.SetString("UserName", "Redis UserName");
+                            HttpContext.Session.SetString("idUser", "Redis idUser");
+                        }
+                        return RedirectToAction("Index");
+                    }
+                    else    // tài khoản không khớp trong Redis
+                    {
+                        Console.WriteLine("dang nhap that bai!");
+                        ViewBag.error = "Login failed";
+                        return RedirectToAction("Login");
+                    }
                 }
-                else
-                {
-                    ViewBag.error = "Login failed";
-                    return RedirectToAction("Login");
-                }
+                //////////////////////////////////////////////////////////|||||||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
             }
             return PartialView();
         }
