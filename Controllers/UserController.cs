@@ -13,6 +13,7 @@ using System.Security.Cryptography;
 using System.Text;
 using StackExchange.Redis;
 using CSRedis;
+using Microsoft.AspNetCore.Session;
 
 namespace MovieZone.Controllers
 {

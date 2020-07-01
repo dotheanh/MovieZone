@@ -29,7 +29,11 @@ namespace MovieZone
             // Khai báo Db Context service
             services.AddDbContext<MovieContext>(options => options.UseSqlite(Configuration.GetConnectionString("MovieContext")));
 
-            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            services.AddDistributedRedisCache(options =>
+            {
+                options.InstanceName = Configuration.GetValue<string>("redis:name");
+                options.Configuration = Configuration.GetValue<string>("redis:host");
+            });
             services.AddSession();
         }
 
