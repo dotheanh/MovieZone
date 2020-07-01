@@ -49,6 +49,23 @@ namespace MovieZone.Controllers
                     // _context.Configuration.ValidateOnSaveEnabled = false;                //// ?????????
                     _context.Users.Add(_user);
                     _context.SaveChanges();
+
+                    /////////////////////////////////////////////////////////////////////////// luu tai khoan vao redis
+                    ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase db = redis.GetDatabase(1);
+                    if (db.Ping().TotalSeconds > 5)
+                    {
+                        throw new TimeoutException("Server Redis not work");
+                    }
+                    // Lưu dữ liệu
+                    string username = _user.UserName;
+                    string password = _user.Password;
+                    Console.WriteLine("\nUserName se luu vao redis\n");
+                    Console.WriteLine(username);
+                    Console.WriteLine("\nPassword se luu vao redis\n");
+                    Console.WriteLine(password);
+                    db.StringSet(username, password);
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////
                     return RedirectToAction("Index");
                 }
                 else
@@ -57,8 +74,8 @@ namespace MovieZone.Controllers
                     return PartialView();
                 }
             }
-            return PartialView();
 
+            return PartialView();
 
         }
 
@@ -67,43 +84,31 @@ namespace MovieZone.Controllers
         public ActionResult Login(string username, string password)
         {
 
-            /////////////////////////////////////////////////////////////////////////////////////////////////
-            // Tạo kết nối
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");  // redis ở client?????????????
-
-            // Lấy DB
-            IDatabase db = redis.GetDatabase(1);
-
-            // Ping thử
-            if (db.Ping().TotalSeconds > 5)
-            {
-                throw new TimeoutException("Server Redis không hoạt động");
-            }
-
-            // Lưu dữ liệu
-            // string key = "username";
-            // string value = "nhoxtheanh";
-            // db.StringSet(key, value);
-
-            // Đọc lại dữ liệu
-            var user = db.StringGet("username");
-            Console.WriteLine(user);
-
-            // // Xóa một key
-            // db.KeyDelete("mykey");
-
-            // Lấy tất cả các key
-            IServer server = redis.GetServer("127.0.0.1:6379");  // redis ở server?????????????
-            var keys = server.Keys(pattern: "*");
-            foreach (var k in keys)
-            {
-                Console.WriteLine(k);
-            }
-
-            /////////////////////////////////////////////////////////////////////////////////////////////////
-
             if (ModelState.IsValid)
             {
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+                // Tạo kết nối
+                ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                // Lấy DB
+                IDatabase db = redis.GetDatabase(1);
+                // Ping thử
+                if (db.Ping().TotalSeconds > 5)
+                {
+                    throw new TimeoutException("Server Redis không hoạt động");
+                }
+                // Đọc lại dữ liệu
+                Console.WriteLine("\n username nhap vao\n");
+                Console.WriteLine(username);
+                Console.WriteLine("\n password nhap vao\n");
+                Console.WriteLine(password);
+                var userPassword = db.StringGet(username);
+                Console.WriteLine("password lay tu redis\n");
+                Console.WriteLine(userPassword);
+                if (password == userPassword)
+                    Console.WriteLine("dang nhap thanh cong!");
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+
                 /////////////// var f_password = GetMD5(password);  
                 var f_password = password;                             // chưa mã hóa password
                 var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();

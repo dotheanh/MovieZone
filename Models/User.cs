@@ -17,7 +17,7 @@ namespace MovieZone.Models
         public string FullName { get; set; }
 
         [Required]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")] 
+        // [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,15}$")] 
         public string Password { get; set; }
  
         [NotMapped] // thuộc tính này ko được ánh xạ vào DB
