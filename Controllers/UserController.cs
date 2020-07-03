@@ -96,7 +96,7 @@ namespace MovieZone.Controllers
                     var userPassword = redis.Get(username);
                     Console.WriteLine("password lay tu redis\n");
                     Console.WriteLine(userPassword);
-                    if (password == userPassword)
+                    if (password == userPassword && password!= null)
                     {
                         Console.WriteLine("dang nhap thanh cong!");
                         /////////////// var f_password = GetMD5(password);  
