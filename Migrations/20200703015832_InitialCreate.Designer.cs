@@ -9,8 +9,8 @@ using MovieZone.Data;
 namespace MovieZone.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20200630074826_ReNewDB")]
-    partial class ReNewDB
+    [Migration("20200703015832_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
