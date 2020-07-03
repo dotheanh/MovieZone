@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -69,11 +71,21 @@
                 <!-- Right navbar links -->
                 <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
                     
+                    @{
+                        if (Context.Session.Get("idUser") != null)
+                        {
+                            <li class="nav-item">
+                                <a href="@Url.Action("Logout","User")" class="btn btn-warning">Logout</a>
+                            </li>
+                        }
+                        else{
+                            <li class="nav-item">
+                                <a href="@Url.Action("Login","User")" class="btn btn-success">Login</a>
+                            </li>
+                        }
+                        
+                    }
                     
-                    <li class="nav-item"></li>
-                        <!-- Logout button -->
-                        <a href="@Url.Action("Logout","User")" class="btn btn-warning">Logout</a>
-                    </li>
                 </ul>
 
 

@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using MovieZone.Data;
 using MovieZone.Models;
 using MovieZone.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace MovieZone.Controllers
 {
@@ -119,7 +120,14 @@ namespace MovieZone.Controllers
         {
             ViewData["MovieId"] = new SelectList(_context.Movies, "Id", "Title");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FullName");
-            return View();
+            if (HttpContext.Session.GetString("idUser") != null)
+            {
+                return View();
+            }
+            else
+            {
+                return PartialView("~/Views/User/Login.cshtml");
+            }
         }
 
         // POST: MovieRental/Create
