@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieZone.Data;
 using MovieZone.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Session;
 
 namespace MovieZone.Controllers
 {
@@ -70,7 +72,14 @@ namespace MovieZone.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            return View();
+            if (HttpContext.Session.GetString("idUser") != null)
+            {
+                return View();
+            }
+            else
+            {
+                return PartialView("~/Views/User/Login.cshtml");
+            }
         }
 
         // POST: Movie/Create

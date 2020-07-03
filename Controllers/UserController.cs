@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieZone.Data;
 using MovieZone.Models;
+// using System.Web;
+using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
+using StackExchange.Redis;
+using CSRedis;
+using Microsoft.AspNetCore.Session;
 
 namespace MovieZone.Controllers
 {
@@ -19,10 +26,146 @@ namespace MovieZone.Controllers
             _context = context;
         }
 
-        // GET: User
-        public async Task<IActionResult> Index()
+        public ActionResult Login()// lần đầu truy cập vào trang login thì sẽ gọi cái này. Sau khi bắt đầu input sẽ chuyển sang method POST Login
         {
-            return View(await _context.Users.ToListAsync());
+            return PartialView();
+        }
+
+        public ActionResult Register()
+        {
+            return PartialView();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(User _user)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var check = _context.Users.FirstOrDefault(s => s.UserName == _user.UserName);
+                if (check == null)
+                {
+                    // _user.Password = GetMD5(_user.Password);                             // chưa mã hóa password
+                    // _context.Configuration.ValidateOnSaveEnabled = false;                //// ?????????
+                    _context.Users.Add(_user);
+                    _context.SaveChanges();
+
+                    /////////////////////////////////////////////////////////////////////////// luu tai khoan vao redis
+                    using (var redis = new RedisClient("localhost"))
+                    {
+                        // Lưu dữ liệu
+                        string username = _user.UserName;
+                        string password = _user.Password;
+                        Console.WriteLine("\n username se luu xuong redis\n");
+                        Console.WriteLine(username);
+                        Console.WriteLine("\n password se luu xuong redis\n");
+                        Console.WriteLine(password);
+                        redis.Set(username, password);           // lưu key-value xuống Redis
+                    }
+                    ////////////////////////////////////////////////////////////////////////////////////////////////////
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.error = "UserName already exists";
+                    return PartialView();
+                }
+            }
+
+            return PartialView();
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(string username, string password)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+                /////////////////////////////////////////////////////////////////////////////////////////////////
+                using (var redis = new RedisClient("localhost"))
+                {
+                    Console.WriteLine("\n username nhap vao\n");
+                    Console.WriteLine(username);
+                    Console.WriteLine("\n password nhap vao\n");
+                    Console.WriteLine(password);
+                    var userPassword = redis.Get(username);
+                    Console.WriteLine("password lay tu redis\n");
+                    Console.WriteLine(userPassword);
+                    if (password == userPassword && password!= null)
+                    {
+                        Console.WriteLine("dang nhap thanh cong!");
+                        /////////////// var f_password = GetMD5(password);  
+                        var f_password = password;                             // chưa mã hóa password
+                        var data = _context.Users.Where(s => s.UserName.Equals(username) && s.Password.Equals(f_password)).ToList();
+                        if (data.Count() > 0)
+                        {
+                            //add session
+                            HttpContext.Session.SetString("FullName", data.FirstOrDefault().FullName.ToString());
+                            HttpContext.Session.SetString("UserName", data.FirstOrDefault().UserName.ToString());
+                            HttpContext.Session.SetString("idUser", data.FirstOrDefault().Id.ToString());
+                        }
+                        else // tài khoản không có trong database, có thể là được tạo trực tiếp ở Redis
+                        {
+                            HttpContext.Session.SetString("FullName", "Redis FullName");
+                            HttpContext.Session.SetString("UserName", "Redis UserName");
+                            HttpContext.Session.SetString("idUser", "Redis idUser");
+                        }
+                        return RedirectToAction("Index");
+                    }
+                    else    // tài khoản không khớp trong Redis
+                    {
+                        Console.WriteLine("dang nhap that bai!");
+                        ViewBag.error = "Login failed";
+                        return RedirectToAction("Login");
+                    }
+                }
+                //////////////////////////////////////////////////////////|||||||\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            }
+            return PartialView();
+        }
+
+
+        //Logout
+        public ActionResult Logout()
+        {
+            HttpContext.Session.Clear();//remove session
+            return RedirectToAction("Login");
+        }
+
+        //create a string MD5
+        // public static string GetMD5(string str)
+        // {
+        //     MD5 md5 = new MD5CryptoServiceProvider();
+        //     byte[] fromData = Encoding.UTF8.GetBytes(str);
+        //     byte[] targetData = md5.ComputeHash(fromData);
+        //     string byte2String = null;
+
+        //     for (int i = 0; i < targetData.Length; i++)
+        //     {
+        //         byte2String += targetData[i].ToString("x2");
+
+        //     }
+        //     return byte2String;
+        // }
+
+
+        // GET: User
+        public async Task<IActionResult> Index() // nếu đã đăng nhập rồi thì mới render ra trang index, ngược lại redirect về trang login
+        {
+            if (HttpContext.Session.GetString("idUser") != null)
+            {
+                return View(await _context.Users.ToListAsync());
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+
         }
 
         // GET: User/Details/5
